@@ -1,0 +1,9 @@
+.idea
+*.iws
+*.iml
+*.ipr
+
+log
+log/*
+
+dump.rdb

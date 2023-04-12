@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package="../proto";
+
+package examples.proto;
+
+// gw: server-rpc
+service Test {
+
+    // gw: GET "/server-rpc/test/exec"
+	rpc Exec(InParam) returns (OutParam) { }
+}
+
+// gw: server-rpc
+service Hello {
+	// gw: POST "/server-rpc/hello/say"
+	rpc Say(InParam) returns (OutParam){}
+}
+
+message InParam {
+	string value = 1;
+}
+
+message OutParam {
+	string msg = 1;
+}

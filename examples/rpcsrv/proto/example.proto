@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package="../proto";
+
+package examples.proto;
+
+// gw: server-rpc
+service Example {
+
+  // gw: GET "/server-rpc/example/call"
+	rpc Call(Request) returns (Response) { }
+}
+
+message Request {
+	string value = 1;
+}
+
+message Response {
+	string msg = 1;
+}

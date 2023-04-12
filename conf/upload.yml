@@ -1,0 +1,4 @@
+upload:
+  path: /home/hanjing/workspace/${APP_NAME:harryup}
+  maxSize: 30
+  timeout: 30

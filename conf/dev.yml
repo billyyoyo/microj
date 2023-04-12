@@ -1,0 +1,25 @@
+config:
+  remote:
+    enable: true
+    provider: etcd3
+    host: http://localhost:2379
+    keyPrefix: /configs/
+    keys:
+      - upload.yml
+      - mysql.yml
+      - redis.yml
+#    user: ${ETCD_USER:root}
+#    pwd: ${ETCD_PWD:root}
+
+registry:
+  enable: true
+  host: localhost:2379
+#  user: ${ETCD_USER:root}
+#  pwd: ${ETCD_PWD:root}
+#  ip: 127.0.0.1
+
+broker:
+  enable: true
+  host: localhost:4222
+#  user: ${NATS_USER:root}
+#  pwd: ${NATS_PWD:root}

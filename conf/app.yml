@@ -1,0 +1,10 @@
+app:
+  name: example
+  port: 8080
+  mode: release
+
+config:
+  local:
+    files:
+    - dev.yml
+    - log.yml

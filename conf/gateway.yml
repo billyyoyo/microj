@@ -1,0 +1,21 @@
+app:
+  name: server-gateway
+  port: 8000
+
+config:
+  local:
+    files:
+    - dev.yml
+    - log.yml
+
+gateway:
+  timeout: 60
+  route:
+    - id: server-api
+      path: /server-api/
+      schema: api
+    - id: server-rpc
+      path: /server-rpc/
+      schema: rpc
+  white-list:
+    - /server-api/login

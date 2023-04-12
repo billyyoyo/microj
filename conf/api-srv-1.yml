@@ -1,0 +1,10 @@
+app:
+  name: server-api
+  port: 8003
+  mode: release
+
+config:
+  local:
+    files:
+    - dev.yml
+    - log.yml

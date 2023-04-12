@@ -1,0 +1,11 @@
+log:
+  file:
+    filename: /home/billyyoyo/workspace/microj/logs/app.log
+    maxsize: 100 #最大文件大小
+    maxbackups: 30 #文件最多保留多少
+    maxage: 30 #文件保留周期
+    compress: true
+  level: debug
+  errStack: true #异常栈
+  debug: true #debug模式打印到std，生产模式输出到文件
+  caller: false #是否打印调用位置

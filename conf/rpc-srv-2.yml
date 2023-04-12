@@ -1,0 +1,10 @@
+app:
+  name: server-rpc
+  port: 8002
+  mode: release
+
+config:
+  local:
+    files:
+    - dev.yml
+    - log.yml

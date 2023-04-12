@@ -1,0 +1,6 @@
+package codes
+
+const (
+	ERR_UNAUTHORIZATION = 500401
+	ERR_NO_PERMISSION   = 500403
+)
