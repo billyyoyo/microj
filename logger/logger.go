@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/billyyoyo/microj/util"
 	"github.com/billyyoyo/viper"
+	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/rs/zerolog/pkgerrors"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"strings"
@@ -67,7 +67,8 @@ func init() {
 		zerolog.SetGlobalLevel(lvl)
 	}
 	if _conf.ErrStack {
-		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
+		//zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
+		zerolog.ErrorStackMarshaler = marshalStack
 	}
 	ctx := zerolog.New(os.Stderr).With().Timestamp().Stack()
 	if _conf.Caller {
@@ -107,6 +108,18 @@ func Warn(msg ...any) {
 	_log.Warn().Msg(fmt.Sprint(msg...))
 }
 
+func Warnf(format string, msg ...any) {
+	_log.Warn().Msgf(format, msg...)
+}
+
+func Err(err error) {
+	ev := _log.Error().Stack()
+	if err != nil {
+		ev = ev.Err(err)
+	}
+	ev.Send()
+}
+
 func Error(msg string, err error, vals ...Val) {
 	ev := _log.Error().Stack()
 	if err != nil {
@@ -117,6 +130,15 @@ func Error(msg string, err error, vals ...Val) {
 			ev = ev.Any(v.K, v.V)
 		}
 	}
+	ev.Msg(msg)
+}
+
+func Errorf(format string, err error, vars ...any) {
+	ev := _log.Error().Stack()
+	if err != nil {
+		ev = ev.Err(err)
+	}
+	msg := fmt.Sprintf(format, vars...)
 	ev.Msg(msg)
 }
 
@@ -210,5 +232,52 @@ func colorize(s interface{}, c int) string {
 }
 
 func stackMarshal(v any) ([]byte, error) {
-	return json.MarshalIndent(v, "", "\t")
+	return json.Marshal(v)
+}
+
+type state struct {
+	b []byte
+}
+
+// Write implement fmt.Formatter interface.
+func (s *state) Write(b []byte) (n int, err error) {
+	s.b = b
+	return len(b), nil
+}
+
+// Width implement fmt.Formatter interface.
+func (s *state) Width() (wid int, ok bool) {
+	return 0, false
+}
+
+// Precision implement fmt.Formatter interface.
+func (s *state) Precision() (prec int, ok bool) {
+	return 0, false
+}
+
+// Flag implement fmt.Formatter interface.
+func (s *state) Flag(c int) bool {
+	return false
+}
+
+func frameField(f errors.Frame, s *state, c rune) string {
+	f.Format(s, c)
+	return string(s.b)
+}
+
+func marshalStack(err error) interface{} {
+	type stackTracer interface {
+		StackTrace() errors.StackTrace
+	}
+	sterr, ok := err.(stackTracer)
+	if !ok {
+		return nil
+	}
+	st := sterr.StackTrace()
+	s := &state{}
+	out := make([]string, 0, len(st))
+	for _, frame := range st {
+		out = append(out, fmt.Sprintf("%s -- %s() :: %s", frameField(frame, s, 's'), frameField(frame, s, 'n'), frameField(frame, s, 'd')))
+	}
+	return out
 }

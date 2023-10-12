@@ -1,4 +1,16 @@
 redis:
-  host: localhost
-  port: 6379
-  auth: hanjing
+  mode: sentinel # single, sentinel
+  debug: true
+  addr:
+    - 172.100.0.3:26379
+    - 172.100.0.2:26380
+    - 172.100.0.6:26381
+#  password: hanjing
+  masterName: mymaster
+  pool:
+    size: 32
+    minIdleSize: 4
+    # all second unit for down fields
+    maxAge: 3600
+    poolTimeout: 30
+    idleTimeout: 30

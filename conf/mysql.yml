@@ -1,6 +1,16 @@
-mysql:
-  host: localhost
-  port: 3306
-  db: kmpro 
+dataSource:
+  host: 127.0.0.1
+  port: 3308
+  db: jim
   user: root
-  pwd: hanjing
+  password: hanjing
+  url: ${db.user}:${db.password}@tcp(${db.host}:${db.port})/${db.db}?charset=utf8&parseTime=True&loc=Local
+  ddl: true
+  debug: true
+  slowSqlThreshold: 1000 # second
+  tableNamePrefix: "im_"
+  pool:
+    maxOpenConns: 16
+    maxIdleConns: 4
+    connMaxLifeTime: 3600 #second
+    connMaxIdleTime: 600 #second

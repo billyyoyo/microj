@@ -6,5 +6,5 @@ app:
 config:
   local:
     files:
-    - dev.yml
+    - mysql.yml
     - log.yml
