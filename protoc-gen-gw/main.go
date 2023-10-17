@@ -152,7 +152,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/billyyoyo/microj/app"
 	"github.com/billyyoyo/microj/client"
 	"github.com/billyyoyo/microj/errs"
 	"github.com/billyyoyo/microj/util"

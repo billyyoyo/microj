@@ -15,7 +15,7 @@ const (
 	ERRCODE_REGISTRY
 	ERRCODE_CONFIG
 	ERRCODE_GATEWAY
-
+	ERRCODE_REQ_PARAMETER
 	ERRCODE_NO_TOKEN
 )
 
@@ -23,11 +23,27 @@ type stackTracer interface {
 	StackTrace() errors.StackTrace
 }
 
+type IsMicro interface {
+	IsMicro()
+}
+
 type MicroError struct {
 	code int
 	msg  string
 	err  error
 }
+
+func (e *MicroError) As(tar any) bool {
+	er, ok := tar.(*MicroError)
+	if ok {
+		er.code = e.code
+		er.msg = e.msg
+		er.err = e.err
+	}
+	return ok
+}
+
+func (e MicroError) IsMicro() {}
 
 func (e MicroError) Error() string {
 	return e.msg
@@ -46,12 +62,14 @@ func (e MicroError) StackTrace() errors.StackTrace {
 }
 
 func New(code int, msg string) error {
-	return &MicroError{
+	e := &MicroError{
 		code: code,
 		msg:  msg,
 		err:  errors.New(msg),
 	}
+	return e
 }
+
 func NewInternal(msg string) error {
 	return New(ERRCODE_COMMON, msg)
 }
@@ -79,4 +97,16 @@ func Wrap(code int, msg string, err error) error {
 func NewRpcError(code int, msg string) error {
 	err := status.New(codes.Code(code), msg).Err()
 	return err
+}
+
+func WrapRpcError(e error) error {
+	if e == nil {
+		return nil
+	}
+
+	if me, ok := e.(*MicroError); ok {
+		return NewRpcError(me.code, me.msg)
+	} else {
+		return NewRpcError(ERRCODE_COMMON, e.Error())
+	}
 }

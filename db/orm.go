@@ -44,12 +44,21 @@ type DBPoolConfig struct {
 	ConnMaxIdleTime int64 `yaml:"connMaxIdleTime"`
 }
 
-func InitDataSource(openFunc func(dsn string) gorm.Dialector, models []interface{}) {
-	err := config.Scan("dataSource", &dbConf)
+type BaseModel struct {
+	ID        int64          `gorm:"primarykey;column:id;type:bigint;"`
+	CreatedAt time.Time      `gorm:"column:created_at"`
+	UpdatedAt time.Time      `gorm:"column:updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;index"`
+}
+
+func InitDataSource(openFunc func(dsn string) gorm.Dialector, models ...interface{}) {
+	c := &DBConfig{}
+	err := config.Scan("dataSource", c)
 	if err != nil {
 		logger.Fatal("db config load error", errors.Wrap(err, ""))
 		return
 	}
+	dbConf = c
 	if dbConf.Host == "" {
 		logger.Fatal("db host no value", nil)
 		return
@@ -71,6 +80,7 @@ func InitDataSource(openFunc func(dsn string) gorm.Dialector, models []interface
 	dbConf.Url = strings.ReplaceAll(dbConf.Url, "${db.user}", dbConf.User)
 	dbConf.Url = strings.ReplaceAll(dbConf.Url, "${db.password}", dbConf.Password)
 	dbConf.Url = strings.ReplaceAll(dbConf.Url, "${db.db}", dbConf.DB)
+	logger.Info(dbConf.Url)
 
 	if dbConf.SlowSqlThreshold == 0 {
 		dbConf.SlowSqlThreshold = 3000
@@ -126,8 +136,8 @@ func initIdGenerater() {
 	}
 }
 
-func Orm() *sql.DB {
-	return db
+func Orm() *gorm.DB {
+	return orm
 }
 
 func NextID() int64 {

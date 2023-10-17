@@ -18,7 +18,7 @@ func NewHelloService() *HelloService {
 }
 
 func (s *HelloService) RegRpc(r *grpc.Server) {
-	proto.RegisterHelloServer(r, NewHelloService())
+	proto.RegisterHelloServer(r, s)
 }
 
 func (s *HelloService) Say(ctx context.Context, req *proto.InParam) (resp *proto.OutParam, err error) {

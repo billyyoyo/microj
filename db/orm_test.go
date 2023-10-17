@@ -4,22 +4,14 @@ import (
 	"fmt"
 	"github.com/billyyoyo/microj/config"
 	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"testing"
-	"time"
 )
-
-type BaseModel struct {
-	ID        int64          `gorm:"primarykey;column:id;type:bigint;"`
-	CreatedAt time.Time      `gorm:"column:created_at"`
-	UpdatedAt time.Time      `gorm:"column:updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;index"`
-}
 
 type User struct {
 	BaseModel
 	LoginName string `gorm:"column:login_name;type:varchar(64);uniqueIndex;not null;comment:''"`
 	UserName  string `gorm:"column:user_name;type:varchar(64);not null"`
+	Face      string `gorm:"column:face;type:varchar(128);"`
 	DeptId    int64  `gorm:"column:dept_id;type:bigint;"`
 	TenantId  int64  `gorm:"column:tenant_id;type:bigint;"`
 }
@@ -47,7 +39,12 @@ func TestConnect(t *testing.T) {
 	fmt.Println(NextID())
 	fmt.Println(NextID())
 	db2 := Orm()
-	if err := db2.Ping(); err == nil {
+	sdb, err := db2.DB()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	if err = sdb.Ping(); err == nil {
 		fmt.Println("Connect success")
 	} else {
 		fmt.Println(err.Error())

@@ -77,14 +77,20 @@ func (a *application) initBack() {
 	}
 	ro.ServiceName = app.Name
 	ro.Port = app.Port
-	registry.Init(ro)
+	if ro.Host != "" {
+		logger.Infof("registry address is %s:%s", ro.Host, ro.Port)
+		registry.Init(ro)
+	}
 	bo := broker.Options{}
 	err = config.Scan("broker", &bo)
 	if err != nil {
 		logger.Error("no mq broker", err)
 		err = nil
 	}
-	broker.Init(bo)
+	if bo.Addr != "" {
+		logger.Infof("mq broker address is %s", bo.Addr)
+		broker.Init(bo)
+	}
 }
 
 func (a *application) BrokerListener(f func()) *application {
