@@ -7,7 +7,7 @@ package examples.proto;
 // gw: server-rpc:example
 service Example {
 
-  // gw: GET "/server-rpc/example/call"
+  // gw: GET "/call"
 	rpc Call(Request) returns (Response) { }
 }
 

@@ -99,7 +99,7 @@ func parseService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generat
 		return nil
 	}
 	for _, method := range s.Methods {
-		mm := parseMethod(g, method)
+		mm := parseMethod(g, service, method)
 		if mm == nil {
 			continue
 		}
@@ -108,7 +108,7 @@ func parseService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generat
 	return service
 }
 
-func parseMethod(g *protogen.GeneratedFile, m *protogen.Method) *GRPCMethod {
+func parseMethod(g *protogen.GeneratedFile, s *GRPCService, m *protogen.Method) *GRPCMethod {
 	method := &GRPCMethod{}
 	method.Name = m.GoName
 	method.InParam = string(m.Input.Desc.Name())
@@ -117,7 +117,8 @@ func parseMethod(g *protogen.GeneratedFile, m *protogen.Method) *GRPCMethod {
 	if strings.HasPrefix(comment, "gw:") {
 		method.HttpMethod = strings.ToUpper(comment[strings.Index(comment, ":")+1 : strings.Index(comment, "\"")])
 		method.HttpMethod = strings.Trim(method.HttpMethod, " ")
-		method.HttpPath = comment[strings.Index(comment, "\"")+1 : strings.LastIndex(comment, "\"")]
+		path := comment[strings.Index(comment, "\"")+1 : strings.LastIndex(comment, "\"")]
+		method.HttpPath = fmt.Sprintf("/%s/%s%s", s.LBName, s.EndpointName, path)
 		if method.HttpMethod == http.MethodPost || method.HttpMethod == http.MethodPut {
 			method.UnmashalFunc = "json.Unmarshal"
 		} else {

@@ -7,13 +7,13 @@ package examples.proto;
 // gw: server-rpc:test
 service Test {
 
-    // gw: GET "/server-rpc/test/exec"
+    // gw: GET "/exec"
 	rpc Exec(InParam) returns (OutParam) { }
 }
 
 // gw: server-rpc:hello
 service Hello {
-	// gw: POST "/server-rpc/hello/say"
+	// gw: POST "/say"
 	rpc Say(InParam) returns (OutParam){}
 }
 
