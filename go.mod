@@ -1,7 +1,7 @@
 module github.com/billyyoyo/microj
 
 require (
-	github.com/billyyoyo/viper v1.15.8
+	github.com/billyyoyo/viper v1.15.10
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-resty/resty/v2 v2.7.0

@@ -96,6 +96,10 @@ func Debug(msg ...any) {
 	_log.Debug().Msg(fmt.Sprint(msg...))
 }
 
+func Debugf(format string, msg ...any) {
+	_log.Debug().Msgf(format, msg...)
+}
+
 func Info(msg ...any) {
 	_log.Info().Msg(fmt.Sprint(msg...))
 }

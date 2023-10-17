@@ -4,14 +4,14 @@ option go_package="../proto";
 
 package examples.proto;
 
-// gw: server-rpc
+// gw: server-rpc:test
 service Test {
 
     // gw: GET "/server-rpc/test/exec"
 	rpc Exec(InParam) returns (OutParam) { }
 }
 
-// gw: server-rpc
+// gw: server-rpc:hello
 service Hello {
 	// gw: POST "/server-rpc/hello/say"
 	rpc Say(InParam) returns (OutParam){}

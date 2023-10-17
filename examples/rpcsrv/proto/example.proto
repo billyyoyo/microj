@@ -4,7 +4,7 @@ option go_package="../proto";
 
 package examples.proto;
 
-// gw: server-rpc
+// gw: server-rpc:example
 service Example {
 
   // gw: GET "/server-rpc/example/call"

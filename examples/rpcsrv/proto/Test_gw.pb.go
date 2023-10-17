@@ -19,7 +19,7 @@ func (e *TestGw) LBName() string {
 }
 
 func (e *TestGw) ServiceName() string {
-	return "Test"
+	return "test"
 }
 
 func NewTestGw() *TestGw {
@@ -78,7 +78,7 @@ func (e *HelloGw) LBName() string {
 }
 
 func (e *HelloGw) ServiceName() string {
-	return "Hello"
+	return "hello"
 }
 
 func NewHelloGw() *HelloGw {

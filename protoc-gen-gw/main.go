@@ -60,6 +60,7 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	for _, s := range pkg.Services {
 		st := strings.ReplaceAll(service_tpl, "{{$SERVICE_NAME}}", s.Name)
 		st = strings.ReplaceAll(st, "{{$LB_NAME}}", s.LBName)
+		st = strings.ReplaceAll(st, "{{$ENDPOINT_NAME}}", s.EndpointName)
 		g.P(st)
 		g.P()
 		g.P(strings.ReplaceAll(init_head_tpl, "{{$SERVICE_NAME}}", s.Name))
@@ -89,8 +90,11 @@ func parseService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generat
 	service.Name = s.GoName
 	comment := strings.Trim(string(s.Comments.Leading), " ")
 	if strings.HasPrefix(comment, "gw:") {
-		service.LBName = strings.Trim(comment[strings.Index(comment, ":")+1:], " ")
-		service.LBName = strings.Trim(service.LBName, "\n")
+		tmp := strings.Trim(comment[strings.Index(comment, ":")+1:], " ")
+		tmp = strings.Trim(tmp, "\n")
+		names := strings.Split(tmp, ":")
+		service.LBName = names[0]
+		service.EndpointName = names[1]
 	} else {
 		return nil
 	}
@@ -131,9 +135,10 @@ type GRPCPackage struct {
 }
 
 type GRPCService struct {
-	Name    string
-	LBName  string
-	Methods []*GRPCMethod
+	Name         string
+	LBName       string
+	EndpointName string
+	Methods      []*GRPCMethod
 }
 
 type GRPCMethod struct {
@@ -166,7 +171,7 @@ func (e *{{$SERVICE_NAME}}Gw) LBName() string {
 }
 
 func (e *{{$SERVICE_NAME}}Gw) ServiceName() string {
-	return "{{$SERVICE_NAME}}"	
+	return "{{$ENDPOINT_NAME}}"	
 }
 
 func New{{$SERVICE_NAME}}Gw() *{{$SERVICE_NAME}}Gw {

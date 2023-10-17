@@ -19,7 +19,7 @@ func (e *ExampleGw) LBName() string {
 }
 
 func (e *ExampleGw) ServiceName() string {
-	return "Example"
+	return "exam"
 }
 
 func NewExampleGw() *ExampleGw {

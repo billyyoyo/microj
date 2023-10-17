@@ -184,6 +184,6 @@ func (l *dLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql str
 		logger.Warnf("Slow sql (%s) spend %dms , effected: %d", sql, elapsed.Milliseconds(), rows)
 	case dbConf.Debug:
 		sql, rows := fc()
-		logger.Infof("Exec sql (%s) spend %d, effected: %d", sql, elapsed.Milliseconds(), rows)
+		logger.Debugf("Exec sql (%s) spend %d, effected: %d", sql, elapsed.Milliseconds(), rows)
 	}
 }
