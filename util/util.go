@@ -76,11 +76,15 @@ func DeleteSlice(arr []string, sub []string) (left []string) {
 }
 
 func QueryUnmarshal(data []byte, ptr any) error {
-	v, err := url.ParseQuery(Bytes2str(data))
+	str := Bytes2str(data)
+	if strings.Contains(str, "?") {
+		str = str[strings.Index(str, "?")+1:]
+	}
+	v, err := url.ParseQuery(str)
 	if err != nil {
 		return errs.Wrap(errs.ERRCODE_GATEWAY, "parse query params error", err)
 	}
-	err = binding.MapFormWithTag(ptr, v, "form")
+	err = binding.MapFormWithTag(ptr, v, "json")
 	if err != nil {
 		return errs.Wrap(errs.ERRCODE_GATEWAY, "bind query params error", err)
 	}

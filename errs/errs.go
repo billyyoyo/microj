@@ -79,6 +79,9 @@ func WrapInternal(msg string, err error) error {
 }
 
 func Wrap(code int, msg string, err error) error {
+	if err == nil {
+		return nil
+	}
 	if me, ok := err.(MicroError); !ok {
 		e := errors.Wrap(err, msg)
 		me = MicroError{

@@ -51,6 +51,22 @@ type BaseModel struct {
 	DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;index"`
 }
 
+type TX struct {
+	tx *gorm.DB
+}
+
+func (t *TX) Rollback() {
+	t.tx.Rollback()
+}
+
+func (t *TX) Commit() {
+	t.tx.Commit()
+}
+
+func (t *TX) Orm() *gorm.DB {
+	return t.tx
+}
+
 func InitDataSource(openFunc func(dsn string) gorm.Dialector, models ...interface{}) {
 	c := &DBConfig{}
 	err := config.Scan("dataSource", c)
@@ -137,11 +153,20 @@ func initIdGenerater() {
 }
 
 func Orm() *gorm.DB {
+	if orm == nil {
+		logger.Fatal("orm not init", errors.New("orm not init"))
+	}
 	return orm
 }
 
 func NextID() int64 {
 	return idGenerater.Generate().Int64()
+}
+
+func StartTX() *TX {
+	return &TX{
+		tx: orm.Begin(),
+	}
 }
 
 type dLogger struct {

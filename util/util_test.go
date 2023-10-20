@@ -80,3 +80,18 @@ func TestRegexp(t *testing.T) {
 	s := r.FindString(str)
 	fmt.Println("'" + s + "'")
 }
+
+func TestQueryParam(t *testing.T) {
+	type Req struct {
+		Id   int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+		Name int64 `protobuf:"varint,1,opt,name=name,proto3" json:"name,omitempty"`
+	}
+	url := "adsfasf?id=1&name=123"
+	req := Req{}
+	err := QueryUnmarshal([]byte(url), &req)
+	if err != nil {
+		fmt.Println("err: ", err.Error())
+		return
+	}
+	fmt.Printf("req: %+v\n", req)
+}

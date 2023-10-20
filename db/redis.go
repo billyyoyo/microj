@@ -55,6 +55,7 @@ func InitRedis() {
 			SlaveOnly:     false, // 只访问从节点，读写分离
 			RouteRandomly: true,  // 只读指令路由到主和从节点
 		}
+		logger.Infof("sentinel mode: %s %+v\n", rConfig.MasterName, rConfig.Address)
 		//if rConfig.Debug {
 		//	opts.OnConnect = onConnect
 		//}
@@ -82,6 +83,7 @@ func InitRedis() {
 		//if rConfig.Debug {
 		//	opts.OnConnect = onConnect
 		//}
+		logger.Infof("single mode: %+v\n", rConfig.Address)
 		if rConfig.Pool.Size > 0 {
 			opts.PoolSize = rConfig.Pool.Size
 		}
@@ -103,6 +105,9 @@ func InitRedis() {
 }
 
 func Redis() redis.Cmdable {
+	if rConfig == nil {
+		logger.Fatal("redis not init", errors.New("redis not init"))
+	}
 	if rConfig.Mode == "sentinel" {
 		return clusterdb
 	} else {
