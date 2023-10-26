@@ -87,8 +87,8 @@ func (a *application) initBack() {
 		logger.Error("no mq broker", err)
 		err = nil
 	}
-	if bo.Addr != "" {
-		logger.Infof("mq broker address is %s", bo.Addr)
+	if bo.Host != "" {
+		logger.Infof("mq broker address is %s", bo.Host)
 		broker.Init(bo)
 	}
 }

@@ -2,6 +2,7 @@ package broker
 
 import (
 	"encoding/json"
+	"github.com/billyyoyo/microj/app"
 	"github.com/billyyoyo/microj/logger"
 )
 
@@ -20,7 +21,7 @@ type Broker interface {
 
 type Options struct {
 	Enable bool   `yaml:"enable"`
-	Addr   string `yaml:"addr"`
+	Host   string `yaml:"host"`
 	User   string `yaml:"user"`
 	Pwd    string `yaml:"pwd"`
 }
@@ -61,9 +62,25 @@ func Connect() error {
 func Disconnect() error {
 	return (*MqBroker).Disconnect()
 }
+
 func Recv(once bool, topic, group string, handler Handler) error {
-	return (*MqBroker).Receive(once, topic, group, handler)
+	err := (*MqBroker).Receive(once, topic, group, handler)
+	if err == nil {
+		logger.Infof("start listen mq %s at %s %t", topic, group, once)
+	}
+	return err
 }
+
+// Subscribe 一条消息被每个监听者都消费一次
+func Subscribe(topic string, handler Handler) error {
+	return Recv(false, topic, app.Name(), handler)
+}
+
+// Consume 一条消息被消费一次
+func Consume(topic string, handler Handler) error {
+	return Recv(true, topic, app.Name(), handler)
+}
+
 func Send(topic string, msg Message) {
 	(*MqBroker).Send(topic, msg)
 }

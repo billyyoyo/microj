@@ -18,12 +18,14 @@ func init() {
 }
 
 func Init() {
+	workspace := util.RunningSpace()
+	logger.Info("app run in ", workspace)
 	logger.Info("load configs")
 	flag.Parse()
 	loader = viper.New()
 	loader.AutomaticEnv()
 	loader.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
-	loader.AddConfigPath(util.RunningSpace() + "conf")
+	loader.AddConfigPath(workspace + "conf")
 	// 1. 加载主配置文件 app.yml
 	loadLocalConfig(mainYamlPath, false)
 	// 2. 加载more-confs的配置文件 如：dev.yml, mysql.yml

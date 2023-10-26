@@ -34,7 +34,7 @@ func init() {
 func newBroker(opts broker.Options) (broker.Broker, error) {
 	if opts.Enable {
 		b := &natsBroker{
-			addr:   opts.Addr,
+			addr:   opts.Host,
 			user:   opts.User,
 			pwd:    opts.Pwd,
 			client: nil,
@@ -121,7 +121,7 @@ func (n *natsBroker) receive(once bool, topic, group string, handler broker.Hand
 
 func (n *natsBroker) Send(topic string, msg broker.Message) error {
 	err := n.client.Publish(topic, msg)
-	return errs.Wrap(errs.ERRCODE_BROKER, err.Error(), err)
+	return errs.Wrap(errs.ERRCODE_BROKER, "", err)
 }
 
 func (n *natsBroker) onDisconnectError(nc *nats.Conn, err error) {
