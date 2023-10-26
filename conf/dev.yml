@@ -5,7 +5,6 @@ config:
     host: http://localhost:2379
     keyPrefix: /configs/
     keys:
-      - upload.yml
       - mysql.yml
       - redis.yml
 #    user: ${ETCD_USER:root}

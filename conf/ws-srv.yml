@@ -1,0 +1,10 @@
+app:
+  name: server-ws
+  port: 8003
+  mode: release
+
+config:
+  local:
+    files:
+    - dev.yml
+    - log.yml
