@@ -12,6 +12,6 @@ import (
 func main() {
 	app.NewApplication().
 		Init().
-		WithServer((&api.ApiServer{}).RegController(controllers.NewExampleController().Apis())).
+		WithServer((&api.ApiServer{}).RegController(controllers.NewExampleController().Apis()...)).
 		Run()
 }

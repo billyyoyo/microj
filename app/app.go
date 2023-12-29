@@ -7,6 +7,7 @@ import (
 	"github.com/billyyoyo/microj/config"
 	"github.com/billyyoyo/microj/logger"
 	"github.com/billyyoyo/microj/registry"
+	"github.com/pkg/errors"
 	"os"
 	"os/signal"
 	"strings"
@@ -46,6 +47,9 @@ func Mode() string {
 }
 
 func App() *application {
+	if app == nil {
+		logger.Fatal("", errors.New("application not create"))
+	}
 	return app
 }
 

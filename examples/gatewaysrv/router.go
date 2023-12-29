@@ -19,7 +19,7 @@ func Routers() []api.Api {
 
 func UserInfo(ctx *gin.Context) {
 	userId := ctx.Query("id")
-	cli := client.NewApiClient("server-api")
+	cli := client.NewApiClient("server-controller")
 	resp, err := cli.R().
 		SetHeader("Authorization", "abc").
 		SetQueryParam("id", userId).

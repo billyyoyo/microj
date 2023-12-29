@@ -1,0 +1,30 @@
+app:
+  name: node-2
+  mode: debug
+  port: 9002
+
+raft:
+  id: node-2
+  address: node-2
+  port: 9102
+  mode: cluster
+  volumeDir: /home/billyyoyo/workspace/microj/examples/coordinatesrv/data/node-2
+  nodes:
+    - id: node-1
+      addr: node-1
+      raftPort: 9001
+      serverPort: 9101
+    - id: node-2
+      addr: node-2
+      raftPort: 9002
+      serverPort: 9102
+    - id: node-3
+      addr: node-3
+      raftPort: 9003
+      serverPort: 9103
+
+
+config:
+  local:
+    files:
+    - log.yml

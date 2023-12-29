@@ -31,7 +31,7 @@ func (s *ApiServer) Init() {
 }
 
 func (s *ApiServer) Run() {
-	logger.Info("init http api server")
+	logger.Info("init http controller server")
 	gin.SetMode(app.Mode())
 	router := gin.New()
 	router.Use(apiLogger())
@@ -61,12 +61,16 @@ func (s *ApiServer) Stop() {
 	s.s.Shutdown(context.Background())
 }
 
-func (s *ApiServer) RegFilter(fs []gin.HandlerFunc) *ApiServer {
-	s.filters = append(s.filters, fs...)
+func (s *ApiServer) RegFilter(fs ...gin.HandlerFunc) *ApiServer {
+	if fs != nil && len(fs) > 0 {
+		s.filters = append(s.filters, fs...)
+	}
 	return s
 }
-func (s *ApiServer) RegController(arr []Api) *ApiServer {
-	s.apis = append(s.apis, arr...)
+func (s *ApiServer) RegController(arr ...Api) *ApiServer {
+	if arr != nil && len(arr) > 0 {
+		s.apis = append(s.apis, arr...)
+	}
 	return s
 }
 

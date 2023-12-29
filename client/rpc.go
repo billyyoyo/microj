@@ -26,7 +26,7 @@ func NewRpcConn(serviceName string) *grpc.ClientConn {
 	resolver.Register(builder)
 	conn, err := grpc.Dial(
 		fmt.Sprintf("lb:///%s", serviceName),
-		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`), // This sets the initial balancing policy.
+		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`), // This sets the initial balancing policy. could add health check config here: "healthCheckConfig": { "serviceName": "service-user"  }
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {

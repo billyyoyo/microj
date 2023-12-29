@@ -147,10 +147,10 @@ func (s *GatewayServer) exec(ctx *fasthttp.RequestCtx) {
 	method := strings.ToUpper(util.Bytes2str(ctx.Method()))
 	path := util.Bytes2str(ctx.Path())
 	subPath := fmt.Sprintf("%s:///%s", serviceSchema, strings.ReplaceAll(path, servicePath, ""))
-	if serviceSchema == "api" {
+	if serviceSchema == "controller" {
 		cli, err := s.selectCli(serviceName)
 		if err != nil {
-			logger.Error("remote api call error", errors.New("no service instance"))
+			logger.Error("remote controller call error", errors.New("no service instance"))
 			body, _ := app.FailedResult(errs.ERRCODE_GATEWAY, "no service instance").Marshal()
 			ctx.Success(CONTENT_TYPE, body)
 			return
@@ -161,7 +161,7 @@ func (s *GatewayServer) exec(ctx *fasthttp.RequestCtx) {
 		ctx.Request.SetRequestURI(subPath)
 		req.SetHost(cli.Addr)
 		if err := cli.DoTimeout(req, resp, time.Duration(s.timeout)*time.Second); err != nil {
-			logger.Error("remote api call error", err)
+			logger.Error("remote controller call error", err)
 			body, _ := app.FailedResult(errs.ERRCODE_GATEWAY, err.Error()).Marshal()
 			ctx.Success(CONTENT_TYPE, body)
 		}
@@ -213,13 +213,13 @@ func (s *GatewayServer) exec(ctx *fasthttp.RequestCtx) {
 			}
 			return
 		} else {
-			logger.Error("remote api call error", errors.New("no endpoint instance"))
+			logger.Error("remote controller call error", errors.New("no endpoint instance"))
 			body, _ := app.FailedResult(errs.ERRCODE_GATEWAY, "no endpoint instance").Marshal()
 			ctx.Success(CONTENT_TYPE, body)
 			return
 		}
 	} else {
-		logger.Error("remote api call error", errors.New("no support schema"))
+		logger.Error("remote controller call error", errors.New("no support schema"))
 		body, _ := app.FailedResult(errs.ERRCODE_GATEWAY, "no support schema").Marshal()
 		ctx.Success(CONTENT_TYPE, body)
 	}

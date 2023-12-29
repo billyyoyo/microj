@@ -75,7 +75,7 @@ func MatchHandler(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 func AuthHandler(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return func(ctx *fasthttp.RequestCtx) {
-		whitelist := []string{"/server-api/login"}
+		whitelist := []string{"/server-controller/login"}
 		originPath := util.Bytes2str(ctx.Request.URI().Path())
 		for _, p := range whitelist {
 			if p == originPath {

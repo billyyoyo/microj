@@ -66,7 +66,7 @@ func Init(opts Options) {
 		return
 	}
 	ServiceRegistry = &reger
-	Register()
+	err = Register()
 	if err != nil {
 		logger.Error("register error", err)
 		return
@@ -78,6 +78,9 @@ func Register() error {
 }
 
 func Deregister() error {
+	if ServiceRegistry == nil {
+		return nil
+	}
 	return (*ServiceRegistry).Deregister()
 }
 

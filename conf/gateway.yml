@@ -11,11 +11,11 @@ config:
 gateway:
   timeout: 60
   route:
-    - id: server-api
-      path: /server-api/
-      schema: api
+    - id: server-controller
+      path: /server-controller/
+      schema: controller
     - id: server-rpc
       path: /server-rpc/
       schema: rpc
   white-list:
-    - /server-api/login
+    - /server-controller/login

@@ -1,5 +1,5 @@
 app:
-  name: server-api
+  name: server-controller
   port: 8003
   mode: release
 

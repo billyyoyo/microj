@@ -92,8 +92,32 @@ func init() {
 	}
 }
 
+func Level() int8 {
+	return int8(_log.GetLevel())
+}
+
+func Trace(msg string) {
+	_log.Trace().Msg(msg)
+}
+
+func TraceM(msg string, m map[string]interface{}) {
+	ev := _log.Trace()
+	for k, v := range m {
+		ev.Any(k, v)
+	}
+	ev.Msg(msg)
+}
+
 func Debug(msg ...any) {
 	_log.Debug().Msg(fmt.Sprint(msg...))
+}
+
+func DebugM(msg string, m map[string]interface{}) {
+	ev := _log.Debug()
+	for k, v := range m {
+		ev.Any(k, v)
+	}
+	ev.Msg(msg)
 }
 
 func Debugf(format string, msg ...any) {
@@ -103,6 +127,13 @@ func Debugf(format string, msg ...any) {
 func Info(msg ...any) {
 	_log.Info().Msg(fmt.Sprint(msg...))
 }
+func InfoM(msg string, m map[string]interface{}) {
+	ev := _log.Info()
+	for k, v := range m {
+		ev.Any(k, v)
+	}
+	ev.Msg(msg)
+}
 
 func Infof(format string, msg ...any) {
 	_log.Info().Msgf(format, msg...)
@@ -110,6 +141,14 @@ func Infof(format string, msg ...any) {
 
 func Warn(msg ...any) {
 	_log.Warn().Msg(fmt.Sprint(msg...))
+}
+
+func WarnM(msg string, m map[string]interface{}) {
+	ev := _log.Warn()
+	for k, v := range m {
+		ev.Any(k, v)
+	}
+	ev.Msg(msg)
 }
 
 func Warnf(format string, msg ...any) {
@@ -133,6 +172,14 @@ func Error(msg string, err error, vals ...Val) {
 		for _, v := range vals {
 			ev = ev.Any(v.K, v.V)
 		}
+	}
+	ev.Msg(msg)
+}
+
+func ErrorM(msg string, m map[string]interface{}) {
+	ev := _log.Error()
+	for k, v := range m {
+		ev.Any(k, v)
 	}
 	ev.Msg(msg)
 }
@@ -165,6 +212,11 @@ func Panic(msg string, err error, vals ...Val) {
 		}
 	}
 	ev.Stack().Msg(msg)
+	_log.With()
+}
+
+func With() zerolog.Context {
+	return _log.With()
 }
 
 func formatLevelFile() zerolog.Formatter {

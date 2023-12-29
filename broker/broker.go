@@ -2,7 +2,6 @@ package broker
 
 import (
 	"encoding/json"
-	"github.com/billyyoyo/microj/app"
 	"github.com/billyyoyo/microj/logger"
 )
 
@@ -60,6 +59,9 @@ func Connect() error {
 }
 
 func Disconnect() error {
+	if MqBroker == nil {
+		return nil
+	}
 	return (*MqBroker).Disconnect()
 }
 
@@ -72,13 +74,13 @@ func Recv(once bool, topic, group string, handler Handler) error {
 }
 
 // Subscribe 一条消息被每个监听者都消费一次
-func Subscribe(topic string, handler Handler) error {
-	return Recv(false, topic, app.Name(), handler)
+func Subscribe(topic, group string, handler Handler) error {
+	return Recv(false, topic, group, handler)
 }
 
 // Consume 一条消息被消费一次
-func Consume(topic string, handler Handler) error {
-	return Recv(true, topic, app.Name(), handler)
+func Consume(topic, group string, handler Handler) error {
+	return Recv(true, topic, group, handler)
 }
 
 func Send(topic string, msg Message) {

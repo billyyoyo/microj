@@ -20,7 +20,7 @@ import (
 
 func TestRest(t *testing.T) {
 	cli := resty.New()
-	cli.SetBaseURL("lb://server-api")
+	cli.SetBaseURL("lb://server-controller")
 	cli.OnBeforeRequest(func(c *resty.Client, req *resty.Request) error {
 		if strings.HasPrefix(c.BaseURL, "lb://") {
 			req.URL = fmt.Sprintf("http://localhost:8003%s", req.URL)
@@ -104,7 +104,7 @@ func TestFast(t *testing.T) {
 	var req fasthttp.Request
 	var resp fasthttp.Response
 	for i := 0; i < 10; i++ {
-		url := "api://localhost:8080/login"
+		url := "controller://localhost:8080/login"
 		req.SetRequestURI(url)
 		req.Header.SetMethod(fasthttp.MethodPost)
 		bs, _ := json.Marshal(map[string]string{
